@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,6 +35,4 @@ public class Car {
         this.price = price;
         this.owner = owner;
     }
-
-
 }

@@ -21,12 +21,12 @@ public class CardatabaseApplication implements CommandLineRunner {
 	private final CarRepository repository;
 	private final OwnerRepository ownerRepository;
 
-    public CardatabaseApplication(CarRepository repository, OwnerRepository ownerRepository) {
-        this.repository = repository;
+	public CardatabaseApplication(CarRepository repository, OwnerRepository ownerRepository) {
+		this.repository = repository;
 		this.ownerRepository = ownerRepository;
-    }
+	}
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		SpringApplication.run(CardatabaseApplication.class, args);
 	}
 
@@ -34,11 +34,11 @@ public class CardatabaseApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// 소유자 객체를 추가
 		Owner owner1 = new Owner("일", "김");
-		Owner owner2 = new Owner("이", "김");
+		Owner owner2 = new Owner("이", "강");
 		// 다수의 객체를 한 번에 저장하는 메서드 처음 사용해보겠습니다.
 		ownerRepository.saveAll(Arrays.asList(owner1, owner2));
 
-		// 그리고 Car의 생성자에 field를 추가했기때문에 오류나는것을 방지해
+		// 그리고 Car의 생성자에 field를 추가했기 때문에 오류 나는 것을 막기 위해 owner들을 추가해주겠습니다
 		repository.save(new Car("Kia", "Seltos", "Chacol", "370SU5690", 2020, 30000000, owner1));
 		repository.save(new Car("Hyundai", "Sonata", "White", "123456", 2025, 25000000, owner2));
 		repository.save(new Car("Honda", "CR-V", "Black-White", "987654", 2024, 45000000, owner2));
