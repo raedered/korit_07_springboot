@@ -1,4 +1,4 @@
-package com.example.cardatabase4.domian;
+package com.example.cardatabase4.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,7 +1,5 @@
-package com.example.cardatabase4.domian;
+package com.example.cardatabase4.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

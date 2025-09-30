@@ -1,4 +1,4 @@
-package com.example.cardatabase.domain;
+package com.example.cardatabase4.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

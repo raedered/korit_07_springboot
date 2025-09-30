@@ -1,6 +1,6 @@
 package com.example.cardatabase4.web;
 
-import com.example.cardatabase4.domian.Car;
+import com.example.cardatabase4.domain.Car;
 import com.example.cardatabase4.service.CarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

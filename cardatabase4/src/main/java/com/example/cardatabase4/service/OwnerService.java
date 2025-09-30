@@ -1,7 +1,7 @@
 package com.example.cardatabase4.service;
 
-import com.example.cardatabase4.domian.Owner;
-import com.example.cardatabase4.domian.OwnerRepository;
+import com.example.cardatabase4.domain.Owner;
+import com.example.cardatabase4.domain.OwnerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
