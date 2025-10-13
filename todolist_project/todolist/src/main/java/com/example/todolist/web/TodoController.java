@@ -4,12 +4,9 @@ import com.example.todolist.domain.Todo;
 import com.example.todolist.service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -31,7 +28,7 @@ public class TodoController {
         return new ResponseEntity<>(saveTodo, HttpStatus.CREATED);
     }
 
-    @GetMapping("/todos{id}")
+    @GetMapping("/todos/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
         return todoService.getTodoById(id)
                 .map(todo -> ResponseEntity.ok().body(todo))

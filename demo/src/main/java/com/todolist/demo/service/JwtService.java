@@ -1,10 +1,11 @@
-package com.example.todolist.service;
+package com.todolist.demo.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -12,29 +13,29 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    static final long EXPIRATION = 86400000;
-    static final String PREFIX = "Bearer ";
+    static final long EXPIRATION_TIME = 86400000;
+    static final String PREFIX = "Bearer";
     static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+    // 요청된 JWT 토큰 생성
     public String getToken(String username) {
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(username)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key)
                 .compact();
-        return token;
     }
 
+    // 요청 Header에서 토큰을 파싱하여 사용자 이름 가져오기
     public String getAuthUser(HttpServletRequest request) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(token != null) {
-            String user = Jwts.parser()
+        if (token != null) {
+            return Jwts.parser()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token.replace(PREFIX, "").trim())
                     .getBody()
                     .getSubject();
-                if(user != null) return user;
         }
         return null;
     }
