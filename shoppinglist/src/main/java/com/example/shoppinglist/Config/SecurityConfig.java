@@ -1,6 +1,7 @@
-package com.example.cardatabase;
+package com.example.shoppinglist.Config;
 
-import com.example.cardatabase.service.UserDetailsServiceImpl;
+import com.example.shoppinglist.handler.AuthEntryPoint;
+import com.example.shoppinglist.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -23,22 +25,10 @@ import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final UserDetailsServiceImpl userDetailsService;
-    private final AuthenticationFilter authenticationFilter;
-    private final AuthEntryPoint exceptionHandler;
-
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, AuthenticationFilter authenticationFilter, AuthEntryPoint exceptionHandler) {
-        this.userDetailsService = userDetailsService;
-        this.authenticationFilter = authenticationFilter;
-        this.exceptionHandler = exceptionHandler;
-    }
-
-    public void configGlobal (AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,26 +36,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager (AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // 로그인 엔드포인트 POST 요청 제외 나머지 인증 필요
-        http.csrf(csrf -> csrf.disable())
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .cors(withDefaults())
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeHttpRequests ->
-                        authorizeHttpRequests.requestMatchers(HttpMethod.POST, "/login").permitAll().anyRequest().authenticated())
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.authenticationEntryPoint(exceptionHandler));
-        // 개발중 로그인 포함 모든 HTTP 메서드 요청 허용
-//        http.csrf(csrf -> csrf.disable())
-//                .cors(withDefaults())
-//                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().permitAll());
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().permitAll());
 
         return http.build();
     }
@@ -74,14 +50,15 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("*"));
+        config.setAllowedOriginPatterns(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("*"));
         config.setAllowedHeaders(Arrays.asList("*"));
 
-        config.setAllowCredentials(false);
+        config.setAllowCredentials(true);
         config.applyPermitDefaultValues();
 
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 }
